@@ -7,8 +7,10 @@ import SignupPage from './Components/SignupPage';
 import Addnotes from './Components/AddNotes';
 import EditPage from './Components/EditNotes';
 import UserPage from './Components/UserPage';
+import { useState } from 'react';
 
 function App() {
+  const [userData, setUserData] = useState([]);
   return (
     <div className="App">
          <Routes>
@@ -24,16 +26,25 @@ function App() {
         element={<SignupPage/>}
        /> 
 
-    <Route path="/add"
-        element={<Addnotes/>}
+    <Route path="/add/:token"
+        element={<Addnotes
+          userData={userData}
+          setUserData={setUserData}
+        />}
        />
 
-        <Route path="/edit"
-        element={<EditPage/>}
+        <Route path="/edit/:id/:token"
+        element={<EditPage
+          userData={userData}
+          setUserData={setUserData}
+        />}
        />
 
       <Route path="/user"
-        element={<UserPage/>}
+        element={<UserPage
+          userData={userData}
+          setUserData={setUserData}
+        />}
        />
 
          </Routes>

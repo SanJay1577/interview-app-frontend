@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react"
 import Base from "../Base/Base"
-import { Button, IconButton, Paper } from "@mui/material"
+import { Button, IconButton, Paper, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-const UserPage = () =>{
+const UserPage = ({userData, setUserData}) =>{
     const navigate = useNavigate()
-    const [userData, setUserData] = useState([]);
     const [error, setError] = useState("");
+    const [tokenId, setTokenId]= useState("");
     useEffect(()=>{
         if(!localStorage.getItem("token")){
             navigate("/login", {replace:true})
         }
         let token = localStorage.getItem("token")
+        setTokenId(token)
         const fetchUserData = async()=>{
          const res = await fetch(`http://localhost:7070/api/notes/user`, {
             method:"GET",
@@ -37,7 +38,7 @@ const UserPage = () =>{
     edge="end" 
     color="inherit" 
     aria-label="add students" 
-    onClick={()=>navigate("/add")}
+    onClick={()=>navigate(`/add/${tokenId}`)}
     sx={{ mr: 2 }}>  
      Add Notes
     </Button>
@@ -58,14 +59,18 @@ const UserPage = () =>{
                      <p>package : {data.package}</p>
                      <p>skills : {data.skills}</p>
                      <p>posted by: {data.user.name}</p>
-                     <Button>Edit</Button>
+                     <Button onClick={()=>navigate(`/edit/${data._id}/${tokenId}`)}>Edit</Button>
                      <Button>Delete</Button>
                    </Paper>
                 ))}
              </div>
+             
         )}
 
-
+     {error? 
+        <Typography color={"danger"}>
+           {error}
+        </Typography> : "" }
         </Base>
     )
 }
